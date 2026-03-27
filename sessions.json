@@ -1,0 +1,44 @@
+{
+  "233506237868": {
+    "state": "idle",
+    "data": {}
+  },
+  "233599966902": {
+    "state": "admin_seller_form",
+    "data": {
+      "selected_shop": "233554444444",
+      "selected_prod": 19,
+      "seller_phone": "233554444444",
+      "qty": 1,
+      "food_total": 15.0,
+      "buyer_zone": "Amamoma",
+      "delivery_fee": 0,
+      "delivery_zone": "",
+      "delivery_address": "",
+      "pickup_or_delivery": "delivery",
+      "admin_verified": true,
+      "seller_form": {
+        "seller_phone": "2335999100100",
+        "seller_name": "Danqway Pizza 🍕",
+        "shop_name": "Danqway Man Foods",
+        "shop_description": "All kinds of pizza",
+        "shop_image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa-g8yFCyPGTRAJmWCuNUdHLvrbiSCZBAgZpuSX_BlWg&s=10",
+        "zone": ""
+      }
+    }
+  },
+  "233551111111": {
+    "state": "seller_menu",
+    "data": {}
+  },
+  "233532635191": {
+    "state": "onboarding_zone",
+    "data": {
+      "name": "Atongo leticia"
+    }
+  },
+  "233246563537": {
+    "state": "onboarding_name",
+    "data": {}
+  }
+}
