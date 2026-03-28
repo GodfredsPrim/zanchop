@@ -10,6 +10,8 @@ load_dotenv()
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
 API_URL = f"https://graph.facebook.com/v21.0/{PHONE_NUMBER_ID}/messages"
+GRAPH_API_BASE = "https://graph.facebook.com/v21.0"
+HTTP = requests.Session()
 
 def _build_headers():
     return {
@@ -33,7 +35,7 @@ def _post_to_meta(payload, action):
     if not WHATSAPP_TOKEN or not PHONE_NUMBER_ID:
         logging.error("Cloud API credentials missing.")
         return False
-    response = requests.post(API_URL, headers=_build_headers(), json=payload, timeout=30)
+    response = HTTP.post(API_URL, headers=_build_headers(), json=payload, timeout=30)
     if response.ok:
         return True
     _log_meta_error(action, response)
@@ -144,3 +146,34 @@ def send_whatsapp_image(to, image_url, caption=None):
     except Exception as e:
         logging.error(f"❌ Failed to send Cloud API image: {e}")
         return False
+
+def fetch_media_bytes(media_id):
+    """Download a WhatsApp media asset from the Meta Cloud API."""
+    if not WHATSAPP_TOKEN or not PHONE_NUMBER_ID:
+        logging.error("Cloud API credentials missing.")
+        return None, None
+
+    try:
+        meta_response = HTTP.get(
+            f"{GRAPH_API_BASE}/{media_id}",
+            headers={"Authorization": f"Bearer {WHATSAPP_TOKEN}"},
+            timeout=30
+        )
+        meta_response.raise_for_status()
+        payload = meta_response.json()
+        media_url = payload.get("url")
+        mime_type = payload.get("mime_type", "image/jpeg")
+        if not media_url:
+            logging.error("No media URL returned for media id %s", media_id)
+            return None, None
+
+        content_response = HTTP.get(
+            media_url,
+            headers={"Authorization": f"Bearer {WHATSAPP_TOKEN}"},
+            timeout=60
+        )
+        content_response.raise_for_status()
+        return content_response.content, mime_type
+    except Exception as e:
+        logging.error(f"❌ Failed to fetch media {media_id}: {e}")
+        return None, None
